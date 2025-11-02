@@ -1,9 +1,11 @@
-package com.handlers.auth.splash
+package com.handlers.auth
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import com.handlers.auth.splash.LoginScreen
+import com.handlers.auth.splash.SplashScreen
 
 const val authRoute = "auth"
 
@@ -22,7 +24,13 @@ fun NavGraphBuilder.authNavGraph(
         route = authRoute
     ) {
         composable(AuthScreen.Splash.route) {
-            SplashScreen()
+            SplashScreen(navController)
+        }
+
+        composable(AuthScreen.Login.route) {
+            LoginScreen {
+                onAuthSuccess()
+            }
         }
     }
 }
