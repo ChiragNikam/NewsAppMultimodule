@@ -28,9 +28,18 @@ fun NavGraphBuilder.authNavGraph(
         }
 
         composable(AuthScreen.Login.route) {
-            LoginScreen {
-                onAuthSuccess()
-            }
+            LoginScreen(
+                onLoginSuccess = {
+                    onAuthSuccess()
+                },
+                onSignUpClick = {
+                    navController.navigate(AuthScreen.SignUp.route)
+                }
+            )
+        }
+
+        composable(AuthScreen.SignUp.route) {
+
         }
     }
 }
