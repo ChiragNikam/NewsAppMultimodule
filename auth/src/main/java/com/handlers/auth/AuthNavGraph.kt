@@ -1,12 +1,9 @@
 package com.handlers.auth
 
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import com.google.firebase.FirebaseApp
 import com.handlers.auth.sign_up.presentation.SignUpScreen
 import com.handlers.auth.splash.LoginScreen
 import com.handlers.auth.splash.SplashScreen
@@ -28,7 +25,9 @@ fun NavGraphBuilder.authNavGraph(
         route = authRoute
     ) {
         composable(AuthScreen.Splash.route) {
-            SplashScreen(navController)
+            SplashScreen(navController) {
+                onAuthSuccess()
+            }
         }
 
         composable(AuthScreen.Login.route) {

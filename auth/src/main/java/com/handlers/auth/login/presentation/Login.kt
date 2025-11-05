@@ -85,7 +85,7 @@ fun LoginScreen(
                 viewModel.login(
                     auth = FirebaseAuth.getInstance(),
                     onSuccess = {
-
+                        onLoginSuccess()
                     },
                     onError = { message ->
                         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()

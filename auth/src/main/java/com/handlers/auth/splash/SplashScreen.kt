@@ -15,19 +15,33 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.compose.AppTheme
+import com.google.firebase.auth.FirebaseAuth
 import com.handlers.auth.AuthScreen
 import com.handlers.theme.R
 import kotlinx.coroutines.delay
 
 
 @Composable
-fun SplashScreen(navController: NavController) {
+fun SplashScreen(
+    navController: NavController,
+    onAuthSuccess: () -> Unit
+) {
+    val auth = FirebaseAuth.getInstance()
+
     // This will trigger once when the composable enters the composition
     LaunchedEffect(Unit) {
         delay(2000) // wait for 2 seconds
-        navController.navigate(AuthScreen.Login.route) { // or your next screen
-            popUpTo(AuthScreen.Splash.route) { inclusive = true }
+
+        val isLoggedIn = (auth.currentUser != null)
+
+        if (isLoggedIn) {
+            onAuthSuccess()
+        } else {
+            navController.navigate(AuthScreen.Login.route) { // or your next screen
+                popUpTo(AuthScreen.Splash.route) { inclusive = true }
+            }
         }
+
     }
 
     Surface(modifier = Modifier.fillMaxSize()) {
@@ -47,13 +61,5 @@ fun SplashScreen(navController: NavController) {
                 )
             }
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun SplashScreenPreview() {
-    AppTheme {
-        SplashScreen(rememberNavController())
     }
 }
