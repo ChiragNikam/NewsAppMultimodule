@@ -2,10 +2,7 @@ package com.handlers.auth.login.presentation
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.handlers.auth.data.repository.UserRepository
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import com.google.firebase.auth.FirebaseAuth
 
 class LoginViewModel() : ViewModel() {
 
@@ -21,19 +18,17 @@ class LoginViewModel() : ViewModel() {
         password.value = newPassword
     }
 
-    fun login(userRepository: UserRepository, onSuccess: () -> Unit, onError: (String) -> Unit) {
-        viewModelScope.launch {
-            isLoading.value = true
-            delay(1000) // simulate API delay
+    fun login(auth: FirebaseAuth, onSuccess: () -> Unit, onError: (String) -> Unit) {
+        isLoading.value = true
 
-            val isValid = userRepository.isValidUser(email.value, password.value)
-            isLoading.value = false
-
-            if (isValid) {
-                onSuccess()
-            } else {
-                onError("Invalid credentials")
+        auth.signInWithEmailAndPassword(email.value, password.value)
+            .addOnCompleteListener { task ->
+                isLoading.value = false
+                if (task.isSuccessful) {
+                    onSuccess()
+                } else {
+                    onError(task.exception?.message ?: "Login failed")
+                }
             }
-        }
     }
 }

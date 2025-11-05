@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1035965614051",
+    "project_id": "multimodulepractice",
+    "storage_bucket": "multimodulepractice.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1035965614051:android:89f7acde35caf7566582d6",
+        "android_client_info": {
+          "package_name": "com.handlers.multimodulepractice"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAzhCodqN6R3fJoPuUgssnZTAvyD1cJoMo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

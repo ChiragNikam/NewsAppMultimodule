@@ -1,4 +1,4 @@
-package com.handlers.auth.splash
+package com.handlers.auth.sign_up.presentation
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
@@ -17,29 +17,24 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.google.firebase.auth.FirebaseAuth
-import com.handlers.auth.login.presentation.LoginViewModel
 
 @Composable
-fun LoginScreen(
-    onLoginSuccess: () -> Unit,
-    onSignUpClick: () -> Unit,
-    viewModel: LoginViewModel = viewModel()
+fun SignUpScreen(
+    onSignUpSuccess: () -> Unit,
+    onLoginClick: () -> Unit,
+    viewModel: SignUpViewModel = viewModel()
 ) {
     val context = LocalContext.current
-    var email by viewModel.email
-    var password by viewModel.password
-    var isLoading by viewModel.isLoading
-    val coroutine = rememberCoroutineScope()
+    val username by viewModel.username
+    val email by viewModel.email
+    val password by viewModel.password
+    val isLoading by viewModel.isLoading
 
     Column(
         modifier = Modifier
@@ -48,48 +43,43 @@ fun LoginScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(
-            text = "Login",
-            style = MaterialTheme.typography.headlineMedium,
-            modifier = Modifier.padding(bottom = 32.dp)
+        Text("Create Account", style = MaterialTheme.typography.headlineMedium)
+
+        Spacer(Modifier.height(32.dp))
+
+        OutlinedTextField(
+            value = username,
+            onValueChange = viewModel::onUsernameChange,
+            label = { Text("User Name") },
+            modifier = Modifier.fillMaxWidth()
         )
 
-        // Email TextField
+        Spacer(Modifier.height(12.dp))
+
         OutlinedTextField(
             value = email,
             onValueChange = viewModel::onEmailChange,
             label = { Text("Email") },
-            singleLine = true,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 8.dp)
+            modifier = Modifier.fillMaxWidth()
         )
 
-        // Password TextField
+        Spacer(Modifier.height(12.dp))
+
         OutlinedTextField(
             value = password,
             onValueChange = viewModel::onPasswordChange,
             label = { Text("Password") },
-            singleLine = true,
             visualTransformation = PasswordVisualTransformation(),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 8.dp)
+            modifier = Modifier.fillMaxWidth()
         )
 
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(Modifier.height(24.dp))
 
-        // Login Button
         Button(
             onClick = {
-                viewModel.login(
-                    auth = FirebaseAuth.getInstance(),
-                    onSuccess = {
-
-                    },
-                    onError = { message ->
-                        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
-                    }
+                viewModel.signUp(
+                    onSuccess = onSignUpSuccess,
+                    onError = { msg -> Toast.makeText(context, msg, Toast.LENGTH_SHORT).show() }
                 )
             },
             enabled = !isLoading,
@@ -97,21 +87,16 @@ fun LoginScreen(
         ) {
             if (isLoading) {
                 CircularProgressIndicator(
-                    color = Color.White,
                     modifier = Modifier.size(20.dp),
                     strokeWidth = 2.dp
                 )
-            } else {
-                Text("Login")
-            }
+            } else Text("Sign Up")
         }
 
-        // Sign Up Button
-        TextButton(
-            onClick = onSignUpClick,
-            modifier = Modifier.padding(top = 16.dp)
-        ) {
-            Text("Don't have an account? Sign Up")
+        Spacer(Modifier.height(12.dp))
+
+        TextButton(onClick = onLoginClick) {
+            Text("Already have an account? Login")
         }
     }
 }
