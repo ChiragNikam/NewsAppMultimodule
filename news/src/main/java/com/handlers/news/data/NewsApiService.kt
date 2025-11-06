@@ -24,12 +24,4 @@ interface NewsApiService {
         @Query("pageSize") pageSize: Int = 20,
         @Query("apiKey") apiKey: String
     ): NewsEverythingResponse
-
-    @GET("v2/top-headlines")
-    suspend fun topHeadlinesString(
-        @Query("country") country: String = "us",
-        @Query("page") page: Int = 1,
-        @Query("pageSize") pageSize: Int = 20,
-        @Query("apiKey") apiKey: String
-    ): String
 }

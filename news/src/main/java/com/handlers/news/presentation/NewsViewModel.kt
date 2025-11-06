@@ -12,12 +12,6 @@ class NewsViewModel(
     private val repo: NewsRepository = NewsRepository()
 ): ViewModel() {
 
-    init {
-        viewModelScope.launch {
-            repo.testApi()
-        }
-    }
-
     val query = mutableStateOf("")
     val isLoading = mutableStateOf(false)
     val error = mutableStateOf<String?>(null)

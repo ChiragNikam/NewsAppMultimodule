@@ -23,6 +23,10 @@ fun AppNavHost(navHostController: NavHostController) {
             }
         )
 
-        newsNavGraph()
+        newsNavGraph(navController = navHostController) {
+            navHostController.navigate(authRoute) {
+                popUpTo(NewsRoute.route) { inclusive = true }
+            }
+        }
     }
 }

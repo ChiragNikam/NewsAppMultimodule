@@ -23,12 +23,12 @@ class LoginViewModel() : ViewModel() {
 
         auth.signInWithEmailAndPassword(email.value, password.value)
             .addOnCompleteListener { task ->
-                isLoading.value = false
                 if (task.isSuccessful) {
                     onSuccess()
                 } else {
                     onError(task.exception?.message ?: "Login failed")
                 }
+                isLoading.value = false
             }
     }
 }

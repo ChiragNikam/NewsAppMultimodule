@@ -17,11 +17,13 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
+import com.google.firebase.auth.FirebaseAuth
 import com.handlers.news.domain.Article
 
 @Composable
 fun NewsScreen(
-    viewModel: NewsViewModel = viewModel()
+    viewModel: NewsViewModel = viewModel(),
+    onSignOut: () -> Unit
 ) {
     val ctx = LocalContext.current
     val items by viewModel.items
@@ -31,7 +33,30 @@ fun NewsScreen(
 
     LaunchedEffect(Unit) { viewModel.loadHeadlines() }
 
+    val userName = FirebaseAuth.getInstance().currentUser?.displayName
+
     Column(Modifier.fillMaxSize()) {
+        // ✅ Header Row with Title + Logout
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                "Hello, $userName",
+                style = MaterialTheme.typography.headlineSmall
+            )
+
+            Button(onClick = {
+                FirebaseAuth.getInstance().signOut()
+                onSignOut()
+            }) {
+                Text("Sign Off")
+            }
+        }
+
         OutlinedTextField(
             value = q,
             onValueChange = { viewModel.query.value = it },
@@ -63,7 +88,10 @@ fun NewsScreen(
                 modifier = Modifier.fillMaxSize(),
                 contentPadding = PaddingValues(12.dp)
             ) {
-                items(items) { art ->
+                items(
+                    items = items,
+                    key = { it.url ?: it.title ?: it.hashCode() } // stable identity
+                ) { art ->
                     ArticleRow(
                         article = art,
                         onOpen = {

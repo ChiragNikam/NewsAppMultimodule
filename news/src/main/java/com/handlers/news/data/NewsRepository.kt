@@ -20,13 +20,4 @@ class NewsRepository {
         if (res.status != "ok") error("News API error")
         return res.articles.map { it.toDomain() }
     }
-
-    suspend fun testApi() {
-        try {
-            val res = RetrofitProvider.api.topHeadlinesString(apiKey = "35d25206115c41a0bfce40750593ffe8")
-            Log.d("TEST", "Success: $res")
-        } catch (e: Exception) {
-            Log.e("TEST", "Error: ${e.message}", e)
-        }
-    }
 }
